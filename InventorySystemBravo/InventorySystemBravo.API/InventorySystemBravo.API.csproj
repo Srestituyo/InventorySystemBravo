@@ -22,6 +22,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\InventorySystemBravo.Repository\InventorySystemBravo.Repository.csproj" />
+    <ProjectReference Include="..\InventorySystemBravo.Service\InventorySystemBravo.Service.csproj" />
   </ItemGroup>
 
 </Project>
