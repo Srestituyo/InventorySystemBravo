@@ -1,0 +1,12 @@
+InventorySystemBravo/InventorySystemBravo.API/bin/* 
+InventorySystemBravo/InventorySystemBravo.API/obj/*
+InventorySystemBravo/InventorySystemBravo.Repository/bin/* 
+InventorySystemBravo/InventorySystemBravo.Repository/obj/* 
+InventorySystemBravo/InventorySystemBravo.Service/bin/* 
+InventorySystemBravo/InventorySystemBravo.Service/obj/* 
+InventorySystemBravo/InventorySystemBravo.Domain/bin/* 
+InventorySystemBravo/InventorySystemBravo.Domain/obj/* 
+.DS_Store
+.idea 
+obj
+bin  
