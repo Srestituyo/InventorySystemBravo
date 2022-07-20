@@ -13,6 +13,12 @@ public class ProductHistoryRepository : IProductHistoryRepository
         _theApplicationDbContext = theApplicationDbContext;
     }
 
+    public async Task AddProductHistory(ProductHistory theProductHistory)
+    {
+        await _theApplicationDbContext.ProductHistory.AddAsync(theProductHistory);
+        await _theApplicationDbContext.SaveChangesAsync();
+    }
+
     public async Task<ProductHistory> GetProductHistoryById(Guid theProductHistoryId)
     {
         var aProductHistory = await _theApplicationDbContext.ProductHistory.Where(x => x.Id == theProductHistoryId)

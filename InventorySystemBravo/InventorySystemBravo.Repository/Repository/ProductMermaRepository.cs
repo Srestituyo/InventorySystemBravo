@@ -13,6 +13,12 @@ public class ProductMermaRepository : IProductMermaRepository
         _theApplicationDbContext = theApplicationDbContext;
     }
 
+    public async Task AddProductMerma(ProductMerma theProductMerma)
+    {
+        await _theApplicationDbContext.ProductMerma.AddAsync(theProductMerma);
+        await _theApplicationDbContext.SaveChangesAsync();
+    }
+
     public async Task<ProductMerma> GetProductMermaById(Guid theProductMermaId)
     {
         var aProductMerma = await _theApplicationDbContext.ProductMerma.Where(x => x.Id == theProductMermaId)

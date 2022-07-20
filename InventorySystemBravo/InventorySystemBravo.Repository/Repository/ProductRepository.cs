@@ -13,6 +13,12 @@ public class ProductRepository : IProductRepository
         _theApplicationDbContext = theApplicationDbContext;
     }
 
+    public async Task AddProduct(Product theProduct)
+    {
+        await _theApplicationDbContext.Products.AddAsync(theProduct);
+        await _theApplicationDbContext.SaveChangesAsync();
+    }
+
     public async Task<Product> GetProductById(Guid theProductId)
     {
         var aProduct = await _theApplicationDbContext.Products.Where(x => x.Id == theProductId).FirstOrDefaultAsync();

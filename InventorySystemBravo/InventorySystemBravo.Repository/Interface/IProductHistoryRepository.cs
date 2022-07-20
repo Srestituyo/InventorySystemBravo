@@ -4,6 +4,8 @@ namespace InventorySystemBravo.Repository.Interface;
 
 public interface IProductHistoryRepository
 {
+    Task AddProductHistory(ProductHistory theProductHistory);
+    
     Task<ProductHistory> GetProductHistoryById(Guid theProductHistoryId);
 
     Task<List<ProductHistory>> GetAllProductHistory();

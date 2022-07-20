@@ -13,6 +13,12 @@ public class ProductCategoryRepository : IProductCategoryRepository
         _theApplicationDbContext = theApplicationDbContext;
     }
 
+    public async Task AddProductCategory(ProductCategory theProductCategory)
+    {
+        await _theApplicationDbContext.ProductCategory.AddAsync(theProductCategory);
+        await _theApplicationDbContext.SaveChangesAsync();
+    }
+
     public async Task<ProductCategory> GetProductCategoryById(Guid theProductCategoryId)
     {
         var aProductCategory = await _theApplicationDbContext.ProductCategory.Where(x => x.Id == theProductCategoryId)

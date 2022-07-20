@@ -4,6 +4,8 @@ namespace InventorySystemBravo.Repository.Interface;
 
 public interface IUserRepository
 {
+    Task AddUser(User theUser);
+    
     Task<User> GetUserById(Guid theUserId);
 
     Task<List<User>> GetAllUser();

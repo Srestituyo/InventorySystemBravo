@@ -13,6 +13,12 @@ public class BrandCatalogRepository : IBrandCatalogRepository
         _theApplicationDbContext = theApplicationDbContext;
     }
 
+    public async Task AddBrandCatalog(BrandCatalog theBrandCatalog)
+    {
+        await _theApplicationDbContext.BrandCatalogs.AddAsync(theBrandCatalog);
+        await _theApplicationDbContext.SaveChangesAsync();
+    }
+
     public async Task<BrandCatalog> GetBrandCatalogById(Guid theBrandCatalog)
     {
         var aBrandCatalog = await _theApplicationDbContext.BrandCatalogs.Where(x => x.Id == theBrandCatalog).FirstOrDefaultAsync();

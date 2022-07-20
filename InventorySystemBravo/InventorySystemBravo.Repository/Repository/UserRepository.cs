@@ -13,6 +13,12 @@ public class UserRepository : IUserRepository
         _theApplicationDbContext = theApplicationDbContext;
     }
 
+    public async Task AddUser(User theUser)
+    {
+        await _theApplicationDbContext.Users.AddAsync(theUser);
+        await _theApplicationDbContext.SaveChangesAsync();
+    }
+
     public async Task<User> GetUserById(Guid theUserId)
     {
         var aUser = await _theApplicationDbContext.Users.Where(x => x.Id == theUserId).FirstOrDefaultAsync();
