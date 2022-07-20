@@ -6,4 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\InventorySystemBravo.Domain\InventorySystemBravo.Domain.csproj" />
+    <ProjectReference Include="..\InventorySystemBravo.Repository\InventorySystemBravo.Repository.csproj" />
+  </ItemGroup>
+
 </Project>
