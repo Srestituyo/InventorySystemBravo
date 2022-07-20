@@ -1,4 +1,5 @@
-﻿using InventorySystemBravo.Repository;
+﻿using InventorySystemBravo.API.Extension;
+using InventorySystemBravo.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
@@ -34,7 +35,7 @@ using (var scope = app.Services.CreateScope())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
-
+app.UseErrorHandlerMiddleware();
 app.MapControllers();
 
 app.Run();
