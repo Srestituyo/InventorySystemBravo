@@ -1,16 +1,16 @@
 using InventorySystemBravo.Domain.Entities;
+using InventorySystemBravo.Service.DTO;
+using InventorySystemBravo.Service.Model;
+using InventorySystemBravo.Service.ViewModel;
+using InventorySystemBravo.Service.Wrapper;
 
 namespace InventorySystemBravo.Service.Interface;
 
 public interface IProductMermaService
 {
-    Task AddProductMerma(ProductMerma theProductMerma);
+    Task<Response<Guid>> AddProductMerma(ProductMermaDTO theProductMerma);
     
-    Task<ProductMerma> GetProductMermaById(Guid theProductMermaId);
+    Task<Response<ProductMermaModel>> GetProductMermaById(Guid theProductMermaId);
 
-    Task<List<ProductMerma>> GetAllProductMerma();
-
-    Task UpdateProductMerma(ProductMerma theProductMerma);
-
-    Task RemoveProductMerma(ProductMerma theProductMerma);
+    Task<Response<ProductMermaViewModel>> GetAllProductMerma(); 
 }

@@ -1,4 +1,5 @@
 using InventorySystemBravo.Domain.Entities;
+using InventorySystemBravo.Service.DTO;
 using InventorySystemBravo.Service.Interface;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,34 +17,37 @@ public class ProductController : ControllerBase
     }
 
     [HttpGet("{theProductId}")]
-    public async Task<Product> GetProductById(Guid theProductId)
+    public async Task<IActionResult> GetProductById(Guid theProductId)
     {
         var aProduct = await _theProductService.GetProductById(theProductId);
-        return aProduct;
+        return Ok(aProduct);
     }
 
     [HttpGet]
-    public async Task<List<Product>> GetAllProduct()
+    public async Task<IActionResult>  GetAllProduct()
     {
         var aProductList = await _theProductService.GetAllProduct();
-        return aProductList;
+        return Ok(aProductList);
     }
 
     [HttpPost]
-    public async Task AddProduct(Product theProduct)
+    public async Task<IActionResult>  AddProduct(ProductDTO theProduct)
     {
-        await _theProductService.AddProduct(theProduct);
+       var aResult =  await _theProductService.AddProduct(theProduct);
+       return Ok(aResult);
     }
 
-    [HttpPut]
-    public async Task UpdateProduct(Product theProduct)
+    [HttpPut("{theProductId}")]
+    public async Task<IActionResult>  UpdateProduct(Guid theProductId, ProductDTO theProduct)
     {
-        await _theProductService.UpdateProduct(theProduct);
+        var aResult = await _theProductService.UpdateProduct(theProductId, theProduct);
+        return Ok(aResult);
     }
 
-    [HttpDelete]
-    public async Task RemoveProduct(Product theProduct)
+    [HttpDelete("{theProductId}")]
+    public async Task<IActionResult>  RemoveProduct(Guid theProductId)
     {
-        await _theProductService.RemoveProduct(theProduct);
+        var aResult = await _theProductService.RemoveProduct(theProductId);
+        return Ok(aResult);
     }
 }

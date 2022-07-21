@@ -1,3 +1,5 @@
+using InventorySystemBravo.API.Middleware;
+
 namespace InventorySystemBravo.API.Extension;
 
 public static class AppExtensions

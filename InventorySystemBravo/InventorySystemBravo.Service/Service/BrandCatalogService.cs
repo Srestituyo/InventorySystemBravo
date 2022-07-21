@@ -1,42 +1,81 @@
+using AutoMapper;
 using InventorySystemBravo.Domain.Entities;
 using InventorySystemBravo.Repository.Interface;
+using InventorySystemBravo.Service.DTO;
 using InventorySystemBravo.Service.Interface;
+using InventorySystemBravo.Service.Model;
+using InventorySystemBravo.Service.ViewModel;
+using InventorySystemBravo.Service.Wrapper;
 
 namespace InventorySystemBravo.Service.Service;
 
 public class BrandCatalogService : IBrandCatalogService
 {
     private readonly IBrandCatalogRepository _theBrandCatalogRepository;
-
-    public BrandCatalogService(IBrandCatalogRepository theBrandCatalogRepository)
+    private readonly IMapper _theMapper;
+    public BrandCatalogService(IBrandCatalogRepository theBrandCatalogRepository, IMapper theMapper)
     {
         _theBrandCatalogRepository = theBrandCatalogRepository;
+        _theMapper = theMapper;
     }
 
-    public async Task AddBrandCatalog(BrandCatalog theBrandCatalog)
+    public async Task<Response<Guid>> AddBrandCatalog(BrandCatalogDTO theBrandCatalog)
     {
-        await _theBrandCatalogRepository.AddBrandCatalog(theBrandCatalog);
+        var aNewBrandCatalog = new BrandCatalog()
+        {
+            Name = theBrandCatalog.Name,
+            Status = theBrandCatalog.Status
+        };
+        
+        await _theBrandCatalogRepository.AddBrandCatalog(aNewBrandCatalog);
+        return new Response<Guid>(aNewBrandCatalog.Id);
     }
 
-    public async Task<BrandCatalog> GetBrandCatalogById(Guid theBrandCatalog)
+    public async Task<Response<BrandCatalogModel>> GetBrandCatalogById(Guid theBrandCatalog)
     {
         var aBrandCatalog = await _theBrandCatalogRepository.GetBrandCatalogById(theBrandCatalog);
-        return aBrandCatalog;
+        var aResponse = _theMapper.Map<BrandCatalogModel>(aBrandCatalog);
+        return new Response<BrandCatalogModel>(aResponse);
     }
 
-    public async Task<List<BrandCatalog>> GetAllBrandCatalog()
+    public async Task<Response<BrandCatalogViewModel>> GetAllBrandCatalog()
     {
-        var aBrandCatalogList = await _theBrandCatalogRepository.GetAllBrandCatalog();
-        return aBrandCatalogList;
+        var aBrandCatalogEntityList = await _theBrandCatalogRepository.GetAllBrandCatalog();
+        var aBrandCatalogList = new BrandCatalogViewModel(); 
+
+        foreach (var aBrandCatalog in aBrandCatalogEntityList)
+        {
+            var aMappedBrand = _theMapper.Map<BrandCatalogModel>(aBrandCatalog);
+            aBrandCatalogList.BrandCatalog.Add(aMappedBrand);
+        } 
+        return new Response<BrandCatalogViewModel>(aBrandCatalogList);
     }
 
-    public async Task UpdateBrandCatalog(BrandCatalog theBrandCatalog)
+    public async Task<Response<Guid>> UpdateBrandCatalog(Guid theBrandCatalogId, BrandCatalogDTO theBrandCatalog)
     {
-        await _theBrandCatalogRepository.UpdateBrandCatalog(theBrandCatalog);
-    }
+        var aBrandCatalog = await _theBrandCatalogRepository.GetBrandCatalogById(theBrandCatalogId);
+        if (aBrandCatalog == null)
+        {
+            throw new KeyNotFoundException($"The Brand Catalog with id {theBrandCatalogId} not found.");
+        }
 
-    public async Task RemoveBrandCatalog(BrandCatalog theBrandCatalog)
+        aBrandCatalog.Name = theBrandCatalog.Name;
+        aBrandCatalog.Status = theBrandCatalog.Status;
+        
+        await _theBrandCatalogRepository.UpdateBrandCatalog(aBrandCatalog);
+        return new Response<Guid>(aBrandCatalog.Id);
+    } 
+
+    public async Task<Response<Guid>> RemoveBrandCatalog(Guid theBrandCatalogId)
     {
-        await _theBrandCatalogRepository.RemoveBrandCatalog(theBrandCatalog);
+        var aBrandCatalog = await _theBrandCatalogRepository.GetBrandCatalogById(theBrandCatalogId);
+
+        if (aBrandCatalog == null)
+        {
+            throw new KeyNotFoundException($"The Brand Catalog with id {theBrandCatalogId} not found");
+        }
+
+        await _theBrandCatalogRepository.RemoveBrandCatalog(aBrandCatalog);
+        return new Response<Guid>(aBrandCatalog.Id);
     }
 }

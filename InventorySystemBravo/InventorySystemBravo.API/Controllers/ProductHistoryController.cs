@@ -1,4 +1,5 @@
 using InventorySystemBravo.Domain.Entities;
+using InventorySystemBravo.Service.DTO;
 using InventorySystemBravo.Service.Interface;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,34 +17,24 @@ public class ProductHistoryController : ControllerBase
     }
 
     [HttpGet("{theProductHistoryId}")]
-    public async Task<ProductHistory> GetProductHistoryById(Guid theProductHistoryId)
+    public async Task<IActionResult> GetProductHistoryById(Guid theProductHistoryId)
     {
         var aProductHistory = await _theProductHistoryService.GetProductHistoryById(theProductHistoryId);
-        return aProductHistory;
+        return Ok(aProductHistory);
     }
 
     [HttpGet]
-    public async Task<List<ProductHistory>> GetAllProductHistory()
+    public async Task<IActionResult> GetAllProductHistory()
     {
         var aProductHistoryList = await _theProductHistoryService.GetAllProductHistory();
-        return aProductHistoryList;
+        return Ok(aProductHistoryList);
     }
 
     [HttpPost]
-    public async Task AddProductHistory(ProductHistory theProductHistory)
+    public async Task<IActionResult> AddProductHistory(ProductHistoryDTO theProductHistory)
     {
-        await _theProductHistoryService.AddProductHistory(theProductHistory);
+        var aResult = await _theProductHistoryService.AddProductHistory(theProductHistory);
+        return Ok(aResult);
     }
-
-    [HttpPut]
-    public async Task UpdateProductHistory(ProductHistory theProductHistory)
-    {
-        await _theProductHistoryService.UpdateProductHistory(theProductHistory);
-    }
-
-    [HttpDelete]
-    public async Task RemoveProductHistory(ProductHistory theProductHistory)
-    {
-        await _theProductHistoryService.RemoveProductHistory(theProductHistory);
-    }
+ 
 }

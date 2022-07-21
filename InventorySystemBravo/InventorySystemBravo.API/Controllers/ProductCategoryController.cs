@@ -1,4 +1,5 @@
 using InventorySystemBravo.Domain.Entities;
+using InventorySystemBravo.Service.DTO;
 using InventorySystemBravo.Service.Interface;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,34 +17,37 @@ public class ProductCategoryController : ControllerBase
     }
 
     [HttpGet("{theProductCategoryId}")]
-    public async Task<ProductCategory> GetProductCategoryById(Guid theProductCategoryId)
+    public async Task<IActionResult> GetProductCategoryById(Guid theProductCategoryId)
     {
         var aProduct = await _theProductCategoryService.GetProductCategoryById(theProductCategoryId);
-        return aProduct;
+        return Ok(aProduct);
     }
 
     [HttpGet]
-    public async Task<List<ProductCategory>> GetAllProductCategory()
+    public async Task<IActionResult> GetAllProductCategory()
     {
         var aProductCategoryList = await _theProductCategoryService.GetAllProductCategory();
-        return aProductCategoryList;
+        return Ok(aProductCategoryList);
     }
 
     [HttpPost]
-    public async Task AddProductCategory(ProductCategory theProductCategory)
+    public async Task<IActionResult> AddProductCategory(ProductCategoryDTO theProductCategory)
     {
-        await _theProductCategoryService.AddProductCategory(theProductCategory);
+        var aResult = await _theProductCategoryService.AddProductCategory(theProductCategory);
+        return Ok(aResult);
     }
 
-    [HttpPut]
-    public async Task UpdateProductCategory(ProductCategory theProductCategory)
+    [HttpPut("{theProductCategoryId}")]
+    public async Task<IActionResult> UpdateProductCategory(Guid theProductCategoryId, ProductCategoryDTO theProductCategory)
     {
-        await _theProductCategoryService.UpdateProductCategory(theProductCategory);
+       var aResult =  await _theProductCategoryService.UpdateProductCategory(theProductCategoryId, theProductCategory);
+       return Ok(aResult);
     }
 
-    [HttpDelete]
-    public async Task RemoveProductCategory(ProductCategory theProductCategory)
+    [HttpDelete("{theProductCategoryId}")]
+    public async Task<IActionResult> RemoveProductCategory(Guid theProductCategoryId)
     {
-        await _theProductCategoryService.RemoveProductCategory(theProductCategory);
+       var aResult = await _theProductCategoryService.RemoveProductCategory(theProductCategoryId);
+       return Ok(aResult);
     }
 }

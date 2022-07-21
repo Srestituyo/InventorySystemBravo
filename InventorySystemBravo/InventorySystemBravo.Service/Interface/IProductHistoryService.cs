@@ -1,16 +1,16 @@
 using InventorySystemBravo.Domain.Entities;
+using InventorySystemBravo.Service.DTO;
+using InventorySystemBravo.Service.Model;
+using InventorySystemBravo.Service.ViewModel;
+using InventorySystemBravo.Service.Wrapper;
 
 namespace InventorySystemBravo.Service.Interface;
 
 public interface IProductHistoryService
 {
-    Task AddProductHistory(ProductHistory theProductHistory);
+    Task<Response<Guid>> AddProductHistory(ProductHistoryDTO theProductHistory);
     
-    Task<ProductHistory> GetProductHistoryById(Guid theProductHistoryId);
+    Task<Response<ProductHistoryModel>> GetProductHistoryById(Guid theProductHistoryId);
 
-    Task<List<ProductHistory>> GetAllProductHistory();
-
-    Task UpdateProductHistory(ProductHistory theProductHistory);
-
-    Task RemoveProductHistory(ProductHistory theProductHistory);
+    Task<Response<ProductHistoryViewModel>> GetAllProductHistory(); 
 }

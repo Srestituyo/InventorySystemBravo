@@ -1,4 +1,5 @@
 using InventorySystemBravo.Domain.Entities;
+using InventorySystemBravo.Service.DTO;
 using InventorySystemBravo.Service.Interface;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,34 +17,37 @@ public class UserController : Controller
     }
 
     [HttpGet("{theUserId}")]
-    public async Task<User> GetUserById(Guid theUserId)
+    public async Task<IActionResult> GetUserById(Guid theUserId)
     {
         var aUser = await _theUserService.GetUserById(theUserId);
-        return aUser;
+        return Ok(aUser);
     }
 
     [HttpGet]
-    public async Task<List<User>> GetAllUser()
+    public async Task<IActionResult> GetAllUser()
     {
         var aUserList = await _theUserService.GetAllUser();
-        return aUserList;
+        return Ok(aUserList);
     }
 
     [HttpPost]
-    public async Task AddUser(User theUser)
+    public async Task<IActionResult> AddUser(UserDTO theUser)
     {
-        await _theUserService.AddUser(theUser);
+        var aResult = await _theUserService.AddUser(theUser);
+        return Ok(aResult);
     }
 
-    [HttpPut]
-    public async Task UpdateUser(User theUser)
+    [HttpPut("{theUserId}")]
+    public async Task<IActionResult> UpdateUser(Guid theUserId, UserDTO theUser)
     {
-        await _theUserService.UpdateUser(theUser);
+        var aResult = await _theUserService.UpdateUser(theUserId, theUser);
+        return Ok(aResult);
     }
     
-    [HttpDelete]
-    public async Task RemoveUser(User theUser)
+    [HttpDelete("{theUserId}")]
+    public async Task<IActionResult> RemoveUser(Guid theUserId)
     {
-        await _theUserService.RemoveUser(theUser);
+        var aResult = await _theUserService.RemoveUser(theUserId);
+        return Ok(aResult);
     }
 }
