@@ -1,42 +1,55 @@
+using AutoMapper;
 using InventorySystemBravo.Domain.Entities;
 using InventorySystemBravo.Repository.Interface;
+using InventorySystemBravo.Service.DTO;
 using InventorySystemBravo.Service.Interface;
+using InventorySystemBravo.Service.Model;
+using InventorySystemBravo.Service.ViewModel;
+using InventorySystemBravo.Service.Wrapper;
 
 namespace InventorySystemBravo.Service.Service;
 
 public class ProductHistoryService : IProductHistoryService
 {
     private readonly IProductHistoryRepository _theProductHistoryRepository;
+    private readonly IMapper _theMapper;
 
-    public ProductHistoryService(IProductHistoryRepository theProductHistoryRepository)
+    public ProductHistoryService(IProductHistoryRepository theProductHistoryRepository, IMapper theMapper)
     {
         _theProductHistoryRepository = theProductHistoryRepository;
+        _theMapper = theMapper; 
     }
 
-    public async Task AddProductHistory(ProductHistory theProductHistory)
+    public async Task<Response<Guid>> AddProductHistory(ProductHistoryDTO theProductHistory)
     {
-        await _theProductHistoryRepository.AddProductHistory(theProductHistory);
+        var aNewProductHistory = new ProductHistory()
+        {
+            Action = theProductHistory.Action,
+            ProductId = theProductHistory.ProductId
+        };
+        await _theProductHistoryRepository.AddProductHistory(aNewProductHistory);
+        return new Response<Guid>(aNewProductHistory.Id);
     }
 
-    public async Task<ProductHistory> GetProductHistoryById(Guid theProductHistoryId)
+    public async Task<Response<ProductHistoryModel>> GetProductHistoryById(Guid theProductHistoryId)
     {
         var aProductHistory = await _theProductHistoryRepository.GetProductHistoryById(theProductHistoryId);
-        return aProductHistory;
+        var aResponse = _theMapper.Map<ProductHistoryModel>(aProductHistory);
+        return new Response<ProductHistoryModel>(aResponse);
     }
 
-    public async Task<List<ProductHistory>> GetAllProductHistory()
+    public async Task<Response<ProductHistoryViewModel>> GetAllProductHistory()
     {
-        var aProductHistory = await _theProductHistoryRepository.GetAllProductHistory();
-        return aProductHistory;
-    }
+        var aProductHistoryList = await _theProductHistoryRepository.GetAllProductHistory();
 
-    public async Task UpdateProductHistory(ProductHistory theProductHistory)
-    {
-        await _theProductHistoryRepository.UpdateProductHistory(theProductHistory);
-    }
+        var aProductHistoryViewModel = new ProductHistoryViewModel();
 
-    public async Task RemoveProductHistory(ProductHistory theProductHistory)
-    {
-        await _theProductHistoryRepository.RemoveProductHistory(theProductHistory);
-    }
+        foreach (var aProductHistoryItem in aProductHistoryList)
+        {
+            var aMappedProductHistory = _theMapper.Map<ProductHistoryModel>(aProductHistoryItem);
+            aProductHistoryViewModel.ProductHistory.Add(aMappedProductHistory);
+        }
+
+        return new Response<ProductHistoryViewModel>(aProductHistoryViewModel);
+    } 
 }

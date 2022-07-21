@@ -1,42 +1,58 @@
+using AutoMapper;
 using InventorySystemBravo.Domain.Entities;
 using InventorySystemBravo.Repository.Interface;
+using InventorySystemBravo.Service.DTO;
 using InventorySystemBravo.Service.Interface;
+using InventorySystemBravo.Service.Model;
+using InventorySystemBravo.Service.ViewModel;
+using InventorySystemBravo.Service.Wrapper;
 
 namespace InventorySystemBravo.Service.Service;
 
 public class ProductMermaService : IProductMermaService
 {
     private readonly IProductMermaRepository _theProductMermaRepository;
+    private readonly IMapper _theMapper;
 
-    public ProductMermaService(IProductMermaRepository theProductMermaRepository)
+    public ProductMermaService(IProductMermaRepository theProductMermaRepository, IMapper theMapper)
     {
         _theProductMermaRepository = theProductMermaRepository;
+        _theMapper = theMapper;
     }
 
-    public async Task AddProductMerma(ProductMerma theProductMerma)
+    public async Task<Response<Guid>> AddProductMerma(ProductMermaDTO theProductMerma)
     {
-        await _theProductMermaRepository.AddProductMerma(theProductMerma);
+        var aProductMerma = new ProductMerma()
+        {
+            Reason = theProductMerma.Reason,
+            ProductId = theProductMerma.ProductId,
+            CreatedBy = theProductMerma.CreatedBy
+        };
+        
+        await _theProductMermaRepository.AddProductMerma(aProductMerma);
+        return new Response<Guid>(aProductMerma.Id);
     }
 
-    public async Task<ProductMerma> GetProductMermaById(Guid theProductMermaId)
+    public async Task<Response<ProductMermaModel>> GetProductMermaById(Guid theProductMermaId)
     {
         var aProductMerma = await _theProductMermaRepository.GetProductMermaById(theProductMermaId);
-        return aProductMerma;
+        var aResponse = _theMapper.Map<ProductMermaModel>(aProductMerma);
+
+        return new Response<ProductMermaModel>(aResponse);
     }
 
-    public async Task<List<ProductMerma>> GetAllProductMerma()
+    public async Task<Response<ProductMermaViewModel>> GetAllProductMerma()
     {
         var aProductMermaList = await _theProductMermaRepository.GetAllProductMerma();
-        return aProductMermaList;
-    }
 
-    public async Task UpdateProductMerma(ProductMerma theProductMerma)
-    {
-        await _theProductMermaRepository.UpdateProductMerma(theProductMerma);
-    }
+        var aProductMermaViewModel = new ProductMermaViewModel();
 
-    public async Task RemoveProductMerma(ProductMerma theProductMerma)
-    {
-        await _theProductMermaRepository.RemoveProductMerma(theProductMerma);
-    }
+        foreach (var aProductMermaItem in aProductMermaList)
+        {
+            var aMappedProductMerma = _theMapper.Map<ProductMermaModel>(aProductMermaItem);
+            aProductMermaViewModel.ProductMerma.Add(aMappedProductMerma); 
+        }
+
+        return new Response<ProductMermaViewModel>(aProductMermaViewModel);
+    } 
 }

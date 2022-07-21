@@ -1,4 +1,5 @@
 using InventorySystemBravo.Domain.Entities;
+using InventorySystemBravo.Service.DTO;
 using InventorySystemBravo.Service.Interface;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,34 +17,37 @@ public class BrandCatalogController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<List<BrandCatalog>> GetAllBrandCatalog()
+    public async Task<IActionResult> GetAllBrandCatalog()
     {
         var aBrandCatalogList = await _theBrandCatalogService.GetAllBrandCatalog();
-        return aBrandCatalogList;
+        return Ok(aBrandCatalogList);
     }
 
     [HttpGet("{theBrandCatalogId}")]
-    public async Task<BrandCatalog> GetBrandCatalogById(Guid theBrandCatalogId)
+    public async Task<IActionResult> GetBrandCatalogById(Guid theBrandCatalogId)
     {
         var aBrandCatalog = await _theBrandCatalogService.GetBrandCatalogById(theBrandCatalogId);
-        return aBrandCatalog;
+        return Ok(aBrandCatalog);
     }
 
     [HttpPost]
-    public async Task AddBrandCatalog(BrandCatalog theBrandCatalog)
+    public async Task<IActionResult> AddBrandCatalog(BrandCatalogDTO theBrandCatalog)
     {
-        await _theBrandCatalogService.AddBrandCatalog(theBrandCatalog);
+       var  aResult =   await _theBrandCatalogService.AddBrandCatalog(theBrandCatalog);
+       return Ok(aResult);
     }
 
-    [HttpPut]
-    public async Task UpdateBrandCatalog(BrandCatalog theBrandCatalog)
+    [HttpPut("{theBrandCatalogId}")]
+    public async Task<IActionResult> UpdateBrandCatalog(Guid theBrandCatalogId, BrandCatalogDTO theBrandCatalog)
     {
-        await _theBrandCatalogService.UpdateBrandCatalog(theBrandCatalog);
+        var aResult = await _theBrandCatalogService.UpdateBrandCatalog(theBrandCatalogId, theBrandCatalog);
+        return Ok(aResult);
     }
 
-    [HttpDelete]
-    public async Task RemoveBrandCatalog(BrandCatalog theBrandCatalog)
+    [HttpDelete("{theBrandCatalogId}")]
+    public async Task<IActionResult> RemoveBrandCatalog(Guid theBrandCatalogId)
     {
-        await _theBrandCatalogService.RemoveBrandCatalog(theBrandCatalog);
+        var aResult  = await _theBrandCatalogService.RemoveBrandCatalog(theBrandCatalogId);
+        return Ok(aResult);
     }
 }

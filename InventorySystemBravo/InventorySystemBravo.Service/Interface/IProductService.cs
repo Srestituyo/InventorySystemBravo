@@ -1,16 +1,20 @@
 using InventorySystemBravo.Domain.Entities;
+using InventorySystemBravo.Service.DTO;
+using InventorySystemBravo.Service.Model;
+using InventorySystemBravo.Service.ViewModel;
+using InventorySystemBravo.Service.Wrapper;
 
 namespace InventorySystemBravo.Service.Interface;
 
 public interface IProductService
 {
-    Task AddProduct(Product theProduct);
+    Task<Response<Guid>> AddProduct(ProductDTO theProduct);
     
-    Task<Product> GetProductById(Guid theProductId);
+    Task<Response<ProductModel>> GetProductById(Guid theProductId);
 
-    Task<List<Product>> GetAllProduct();
+    Task<Response<ProductViewModel>> GetAllProduct();
 
-    Task UpdateProduct(Product theProduct);
+    Task<Response<Guid>> UpdateProduct(Guid theProductId, ProductDTO theProduct);
 
-    Task RemoveProduct(Product theProduct);
+    Task<Response<Guid>> RemoveProduct(Guid theProductId);
 }

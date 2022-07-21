@@ -1,16 +1,20 @@
 using InventorySystemBravo.Domain.Entities;
+using InventorySystemBravo.Service.DTO;
+using InventorySystemBravo.Service.Model;
+using InventorySystemBravo.Service.ViewModel;
+using InventorySystemBravo.Service.Wrapper;
 
 namespace InventorySystemBravo.Service.Interface;
 
 public interface IBrandCatalogService
 {
-    Task AddBrandCatalog(BrandCatalog theBrandCatalog);
+    Task<Response<Guid>> AddBrandCatalog(BrandCatalogDTO theBrandCatalog);
     
-    Task<BrandCatalog> GetBrandCatalogById(Guid theBrandCatalog);
+    Task<Response<BrandCatalogModel>> GetBrandCatalogById(Guid theBrandCatalog);
 
-    Task<List<BrandCatalog>> GetAllBrandCatalog();
+    Task<Response<BrandCatalogViewModel>> GetAllBrandCatalog();
 
-    Task UpdateBrandCatalog(BrandCatalog theBrandCatalog);
+    Task<Response<Guid>> UpdateBrandCatalog(Guid theBrandCatalogId, BrandCatalogDTO theBrandCatalog);
 
-    Task RemoveBrandCatalog(BrandCatalog theBrandCatalog);
+    Task<Response<Guid>> RemoveBrandCatalog(Guid theBranCatalogId);
 }

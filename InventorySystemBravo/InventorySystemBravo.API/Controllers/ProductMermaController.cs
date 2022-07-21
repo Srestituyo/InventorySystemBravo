@@ -1,4 +1,5 @@
 using InventorySystemBravo.Domain.Entities;
+using InventorySystemBravo.Service.DTO;
 using InventorySystemBravo.Service.Interface;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,22 +17,23 @@ public class ProductMermaControlller : ControllerBase
     }
     
     [HttpGet("{theProductMermaId}")]
-    public async Task<ProductMerma> GetProductMermaById(Guid theProductMermaId)
+    public async Task<IActionResult> GetProductMermaById(Guid theProductMermaId)
     {
         var aProductMerma = await _theProductMermaService.GetProductMermaById(theProductMermaId);
-        return aProductMerma;
+        return Ok(aProductMerma);
     }
 
     [HttpGet]
-    public async Task<List<ProductMerma>> GetAllProductMerma()
+    public async Task<IActionResult> GetAllProductMerma()
     {
         var aProductMermaList = await _theProductMermaService.GetAllProductMerma();
-        return aProductMermaList;
+        return Ok(aProductMermaList);
     }
 
     [HttpPost]
-    public async Task AddProductMerma(ProductMerma theProductMerma)
+    public async Task<IActionResult> AddProductMerma(ProductMermaDTO theProductMerma)
     {
-        await _theProductMermaService.AddProductMerma(theProductMerma);
+        var aResult  = await _theProductMermaService.AddProductMerma(theProductMerma);
+        return Ok(aResult);
     }
 }

@@ -1,16 +1,20 @@
 using InventorySystemBravo.Domain.Entities;
+using InventorySystemBravo.Service.DTO;
+using InventorySystemBravo.Service.Model;
+using InventorySystemBravo.Service.ViewModel;
+using InventorySystemBravo.Service.Wrapper;
 
 namespace InventorySystemBravo.Service.Interface;
 
 public interface IProductCategoryService
 {
-    Task AddProductCategory(ProductCategory theProductCategory);
+    Task<Response<Guid>> AddProductCategory(ProductCategoryDTO theProductCategory);
     
-    Task<ProductCategory> GetProductCategoryById(Guid theProductCategoryId);
+    Task<Response<ProductCategoryModel>> GetProductCategoryById(Guid theProductCategoryId);
 
-    Task<List<ProductCategory>> GetAllProductCategory();
+    Task<Response<ProductCategoryViewModel>> GetAllProductCategory();
 
-    Task UpdateProductCategory(ProductCategory theProductCategory);
+    Task<Response<Guid>> UpdateProductCategory(Guid theProductCategoryId, ProductCategoryDTO theProductCategory);
 
-    Task RemoveProductCategory(ProductCategory theProductCategory);
+    Task<Response<Guid>> RemoveProductCategory(Guid theProductCategoryId);
 }
